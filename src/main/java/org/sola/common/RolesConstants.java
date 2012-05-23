@@ -42,8 +42,8 @@ public class RolesConstants {
     public static final String APPLICATION_CREATE_APPS = "ApplnCreate";
     public static final String APPLICATION_EDIT_APPS = "ApplnEdit";
     public static final String APPLICATION_PRINT_STATUS_REPORT = "ApplnStatus";
-    public static final String APPLICATION_ASSIGN_TO_YOURSELF = "ApplnAssignSelf";
-    public static final String APPLICATION_ASSIGN_TO_OTHERS = "ApplnAssignOthers";
+    public static final String APPLICATION_ASSIGN_TO_DEPARTMENT = "ApplnAssignDeprt";
+    public static final String APPLICATION_ASSIGN_TO_ALL = "ApplnAssignAll";
     public static final String APPLICATION_UNASSIGN_FROM_YOURSELF = "ApplnUnassignSelf";
     public static final String APPLICATION_UNASSIGN_FROM_OTHERS = "ApplnUnassignOthers";
     public static final String APPLICATION_SERVICE_START = "StartService";
