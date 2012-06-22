@@ -149,6 +149,30 @@ public class FileUtility {
         }
     }
 
+    public static ImageIcon getImageIcon(byte[] fileBinary, String tmpFileName) {
+        // Create file in temp folder
+        if (tmpFileName == null || tmpFileName.equals("") || fileBinary == null) {
+            return null;
+        }
+
+        File file = new File(String.format("%s%ssola_server_file_%s", System.getProperty("java.io.tmpdir"),
+                File.separator, tmpFileName));
+        try {
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+            FileOutputStream fs = new FileOutputStream(file);
+            fs.write(fileBinary);
+            fs.flush();
+            fs.close();
+            return new ImageIcon(file.getAbsolutePath());
+        } catch (IOException iex) {
+            Object[] lstParams = {iex.getLocalizedMessage()};
+            throw new SOLAException(ClientMessage.ERR_FAILED_CREATE_NEW_FILE, lstParams);
+        }
+    }
+    
     /**
      * Creates thumbnail image for the given file. Returns null if format 
      * is not supported.
