@@ -149,6 +149,7 @@ public class FileUtility {
         }
     }
 
+    //By Kabindra.
     public static ImageIcon getImageIcon(byte[] fileBinary, String tmpFileName) {
         // Create file in temp folder
         if (tmpFileName == null || tmpFileName.equals("") || fileBinary == null) {
