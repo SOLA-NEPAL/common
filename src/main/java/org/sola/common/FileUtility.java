@@ -1,58 +1,103 @@
 /**
  * ******************************************************************************************
- * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations (FAO).
- * All rights reserved.
+ * Copyright (C) 2012 - Food and Agriculture Organization of the United Nations
+ * (FAO). All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,this list
- *       of conditions and the following disclaimer.
- *    2. Redistributions in binary form must reproduce the above copyright notice,this list
- *       of conditions and the following disclaimer in the documentation and/or other
- *       materials provided with the distribution.
- *    3. Neither the name of FAO nor the names of its contributors may be used to endorse or
- *       promote products derived from this software without specific prior written permission.
+ * 1. Redistributions of source code must retain the above copyright notice,this
+ * list of conditions and the following disclaimer. 2. Redistributions in binary
+ * form must reproduce the above copyright notice,this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3. Neither the name of FAO nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,STRICT LIABILITY,OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT,STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  * *********************************************************************************************
  */
 package org.sola.common;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
-import java.awt.Desktop;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
+import java.awt.image.RenderedImage;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 import org.apache.sanselan.Sanselan;
 import org.sola.common.messaging.ClientMessage;
 import org.sola.common.messaging.ServiceMessage;
 
-/** Provides static methods to manage various aspects related to the files. */
+/**
+ * Provides static methods to manage various aspects related to the files.
+ */
 public class FileUtility {
 
-    /** 
-     * Returns <code>byte[]</code> array of the file. 
+    private static class FileUtilityHolder {
+
+        private static final FileUtility INSTANCE = new FileUtility();
+    }
+
+    private FileUtility() {
+    }
+
+    public static FileUtility getInstance() {
+        return FileUtilityHolder.INSTANCE;
+    }
+
+    /**
+     * Returns binary array out of provided {@link BufferedImage}
+     *
+     * @param image BufferedImage instance to get byte array from.
+     */
+    public static byte[] getFileBinary(BufferedImage image) {
+        try {
+            if(image == null){
+                return null;
+            }
+            
+            byte[] binaryArray = null;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                ImageIO.write((RenderedImage) image, "png", baos);
+            } catch (IOException ex) {
+            } finally {
+                if (baos != null) {
+                    binaryArray = baos.toByteArray();
+                }
+                baos.flush();
+                baos.close();
+            }
+            return binaryArray;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns
+     * <code>byte[]</code> array of the file.
+     *
      * @param filePath The full path to the file.
      */
     public static byte[] getFileBinary(String filePath) {
@@ -96,8 +141,9 @@ public class FileUtility {
         }
     }
 
-    /** 
+    /**
      * Returns file's extention.
+     *
      * @param fileName The name of the file.
      */
     public static String getFileExtesion(String fileName) {
@@ -109,8 +155,94 @@ public class FileUtility {
     }
 
     /**
-     * Creates the file out of the given byte array in the temporary folder 
-     * and runs it.
+     * Returns {@link FileFilter} object user to filter out files with given
+     * extentions.
+     *
+     * @param exts String array of extentions to use for filtering.
+     * @param desc Description for filtered files
+     */
+    public static FileFilter getFileFilter(final String[] exts, final String desc) {
+        //prepare file filter.
+        FileFilter filter = new FileFilter() {
+
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                } else {
+                    String filepathname = f.getAbsolutePath().toLowerCase();
+                    for (String ext : exts) {
+                        if (filepathname.endsWith(ext)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public String getDescription() {
+                return desc;
+            }
+        };
+        return filter;
+    }
+
+    /**
+     * Returns image from select file.
+     *
+     * @param filter {@link FileFilter} instance to use for filtering files in
+     * the browse dialog.
+     * @param form Form instance to use as a parent for showing browse dialog
+     * window.
+     */
+    public Icon getImageFile(FileFilter filter, Component form) {
+        File file = getFile(filter, form);
+        if (file != null) {
+            return new ImageIcon(file.getAbsolutePath());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns select file.
+     *
+     * @param filter {@link FileFilter} instance to use for filtering files in
+     * the browse dialog.
+     * @param form Form instance to use as a parent for showing browse dialog
+     * window.
+     */
+    public File getFile(FileFilter filter, Component form) {
+        JFileChooser fileOpen = new JFileChooser();
+        fileOpen.setDialogTitle("Select image.");
+        fileOpen.setVisible(true);
+        fileOpen.setFileFilter(filter);
+        fileOpen.showOpenDialog(form);
+        return fileOpen.getSelectedFile();
+    }
+
+    /**
+     * Returns {@link Icon} out of provided byte array.
+     *
+     * @param imageBinary Binary array, representing image.
+     */
+    public static Icon getIcon(byte[] imageBinary) {
+        if (imageBinary != null && imageBinary.length > 1) {
+            try {
+                return new ImageIcon(imageBinary);
+            } catch (Exception e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Creates the file out of the given byte array in the temporary folder and
+     * runs it.
+     *
      * @param fileBinary Byte array representing file content.
      * @param tmpFileName The name to use as a temporary file name.
      */
@@ -149,34 +281,26 @@ public class FileUtility {
         }
     }
 
-    //By Kabindra.
-    public static ImageIcon getImageIcon(byte[] fileBinary, String tmpFileName) {
-        // Create file in temp folder
-        if (tmpFileName == null || tmpFileName.equals("") || fileBinary == null) {
+    /**
+     * Creates thumbnail image for the given file. Returns null if format is not
+     * supported.
+     *
+     * @param file The file instance.
+     * @param width Thumbnail width.
+     * @param height Thumbnail height.
+     */
+    public static BufferedImage createImageThumbnail(File file, int width, int height) {
+        if(file==null){
             return null;
-        }
-
-        File file = new File(String.format("%s%ssola_server_file_%s", System.getProperty("java.io.tmpdir"),
-                File.separator, tmpFileName));
-        try {
-            if (file.exists()) {
-                file.delete();
-            }
-            file.createNewFile();
-            FileOutputStream fs = new FileOutputStream(file);
-            fs.write(fileBinary);
-            fs.flush();
-            fs.close();
-            return new ImageIcon(file.getAbsolutePath());
-        } catch (IOException iex) {
-            Object[] lstParams = {iex.getLocalizedMessage()};
-            throw new SOLAException(ClientMessage.ERR_FAILED_CREATE_NEW_FILE, lstParams);
+        } else {
+            return createImageThumbnail(file.getAbsolutePath(), width, height);
         }
     }
     
     /**
-     * Creates thumbnail image for the given file. Returns null if format 
-     * is not supported.
+     * Creates thumbnail image for the given file. Returns null if format is not
+     * supported.
+     *
      * @param filePath The full path to the file.
      * @param width Thumbnail width.
      * @param height Thumbnail height.
@@ -251,10 +375,10 @@ public class FileUtility {
                     raf.close();
 
                 } else {
-                    
+
                     BufferedImage img = Sanselan.getBufferedImage(file);
                     thumbnail = Toolkit.getDefaultToolkit().createImage(img.getSource());
-                    
+
                 }
 
                 if (thumbnail == null || thumbnail.getWidth(null) <= 0
