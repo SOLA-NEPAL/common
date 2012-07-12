@@ -43,6 +43,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import org.apache.sanselan.Sanselan;
 import org.sola.common.messaging.ClientMessage;
@@ -150,6 +151,7 @@ public class FileUtility {
     }
 
     //By Kabindra.
+    //--------------------------------------------------------------------------
     public static ImageIcon getImageIcon(byte[] fileBinary, String tmpFileName) {
         // Create file in temp folder
         if (tmpFileName == null || tmpFileName.equals("") || fileBinary == null) {
@@ -173,6 +175,25 @@ public class FileUtility {
             throw new SOLAException(ClientMessage.ERR_FAILED_CREATE_NEW_FILE, lstParams);
         }
     }
+    
+     public static void createImageFile(BufferedImage img, String tmpFileName) {
+        // Create file in temp folder
+        if (tmpFileName == null || tmpFileName.equals("") || img == null) {
+            return;
+        }
+
+        File file = new File(String.format("%s%ssola_server_file_%s", System.getProperty("java.io.tmpdir"),
+                File.separator, tmpFileName));
+        try {
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+            ImageIO.write(img, "png", file);
+        } catch (IOException iex) {
+        }
+    }
+    //--------------------------------------------------------------------------
     
     /**
      * Creates thumbnail image for the given file. Returns null if format 
