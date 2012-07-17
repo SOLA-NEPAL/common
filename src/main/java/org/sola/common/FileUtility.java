@@ -308,14 +308,15 @@ public class FileUtility {
         }
     }
     
-    public static void createImageFile(BufferedImage img, String tmpFileName) {
+    public static String createImageFile(BufferedImage img, String tmpFileName) {
         // Create file in temp folder
         if (tmpFileName == null || tmpFileName.equals("") || img == null) {
-            return;
+            return "";
         }
 
-        File file = new File(String.format("%s%ssola_server_file_%s", System.getProperty("java.io.tmpdir"),
-                File.separator, tmpFileName));
+        String filename=String.format("%s%ssola_server_file_%s", System.getProperty("java.io.tmpdir"),
+                File.separator, tmpFileName);
+        File file = new File(filename);
         try {
             if (file.exists()) {
                 file.delete();
@@ -324,6 +325,7 @@ public class FileUtility {
             ImageIO.write(img, "png", file);
         } catch (IOException iex) {
         }
+        return filename;
     }
     //--------------------------------------------------------------------------
     
