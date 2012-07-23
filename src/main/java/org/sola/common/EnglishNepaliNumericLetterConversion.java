@@ -4,51 +4,104 @@
  */
 package org.sola.common;
 
+import java.util.Locale;
+
 /**
  *
  * @author KumarKhadka
  */
 public class EnglishNepaliNumericLetterConversion {
-       
-    public static String toNepali(String englishNumber){   
-        String nepaliNumber=englishNumber;
-        if("".equals(nepaliNumber)){
-            return nepaliNumber;
-        }          
-        nepaliNumber=nepaliNumber.trim();   
-        nepaliNumber=nepaliNumber.replace('0', '०');
-        nepaliNumber=nepaliNumber.replace('1', '१');
-        nepaliNumber= nepaliNumber.replace('2', '२');
-        nepaliNumber= nepaliNumber.replace('3', '३');
-        nepaliNumber= nepaliNumber.replace('4', '४');
-        nepaliNumber= nepaliNumber.replace('5', '५');
-        nepaliNumber= nepaliNumber.replace('6', '६');
-        nepaliNumber= nepaliNumber.replace('7', '७');
-        nepaliNumber= nepaliNumber.replace('8', '८');
-        nepaliNumber= nepaliNumber.replace('9', '९'); 
-        
+
+    public static String toNepali(String englishNumber) {
+        String nepaliNumber;
+        char[] charArray = englishNumber.toCharArray();
+        for (int i = 0; i < englishNumber.length(); i++) {
+            switch (charArray[i]) {
+                case '0':
+                    charArray[i] = '०';
+                    break;
+                case '1':
+                    charArray[i] = '१';
+                    break;
+                case '2':
+                    charArray[i] = '२';
+                    break;
+                case '3':
+                    charArray[i] = '३';
+                    break;
+                case '4':
+                    charArray[i] = '४';
+                    break;
+                case '5':
+                    charArray[i] = '५';
+                    break;
+                case '6':
+                    charArray[i] = '६';
+                    break;
+                case '7':
+                    charArray[i] = '७';
+                    break;
+                case '8':
+                    charArray[i] = '८';
+                    break;
+                case '9':
+                    charArray[i] = '९';
+                    break;
+            }
+        }
+        nepaliNumber = new String(charArray);
         return nepaliNumber;
     }
-        
-  
-       
-    public static String toEnglish(String nepali){       
-              
-        if("".equals(nepali)){
-            return nepali;
+
+    public static String toEnglish(String nepaliNumber) {
+
+        String englishNumber;
+        char[] charArray = nepaliNumber.toCharArray();
+        for (int i = 0; i < nepaliNumber.length(); i++) {
+            switch (charArray[i]) {
+                case '०':
+                    charArray[i] = '0';
+                    break;
+                case '१':
+                    charArray[i] = '1';
+                    break;
+                case '२':
+                    charArray[i] = '2';
+                    break;
+                case '३':
+                    charArray[i] = '3';
+                    break;
+                case '४':
+                    charArray[i] = '4';
+                    break;
+                case '५':
+                    charArray[i] = '5';
+                    break;
+                case '६':
+                    charArray[i] = '6';
+                    break;
+                case '७':
+                    charArray[i] = '7';
+                    break;
+                case '८':
+                    charArray[i] = '8';
+                    break;
+                case '९':
+                    charArray[i] = '9';
+                    break;
+
+            }
         }
-        nepali=nepali.trim();   
-        nepali=nepali.replace('०', '0');
-        nepali=nepali.replace('१', '1');
-        nepali=nepali.replace('२', '2');
-        nepali=nepali.replace('३', '3');
-        nepali=nepali.replace('४', '4');
-        nepali=nepali.replace('५', '5');
-        nepali=nepali.replace('६', '6');
-        nepali=nepali.replace('७', '7');
-        nepali=nepali.replace('८', '8');
-        nepali=nepali.replace('९', '9'); 
-        
-        return nepali;
-    }     
+        englishNumber = new String(charArray);
+        return englishNumber;
+    }
+
+    public static String getLocalizedValue(String str) {
+
+        if (Locale.getDefault().getLanguage().equals("np")) {
+            return toNepali(str);
+        } else {
+            return toEnglish(str);
+        }
+    }
 }
