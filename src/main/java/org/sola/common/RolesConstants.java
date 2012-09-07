@@ -82,6 +82,8 @@ public class RolesConstants {
 
     // CADASTRE
     public static final String CADASTRE_PARCEL_SAVE = "ParcelSave";
+    public static final String CADASTRE_MAP_SHEET_SAVE = "MapSheetSave";
+    public static final String CADASTRE_PARCEL_DETAILS_SAVE = "ParcelDetailsSave";
 
     // PARTY
     public static final String PARTY_SAVE = "PartySave";
