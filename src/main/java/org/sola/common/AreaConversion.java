@@ -12,20 +12,26 @@ import java.text.DecimalFormat;
  */
 public class AreaConversion {
 
+    public static final String CODE_AREA_TYPE_SQMT = "sqm";
+    public static final String CODE_AREA_TYPE_HECTARE = "hectare";
+    public static final String CODE_AREA_TYPE_SQFT = "sqfeet";
+    public static final String CODE_AREA_TYPE_BIGHA_KATHA_DHUR = "bighar";
+    public static final String CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM = "ropani";
+    
     private static DecimalFormat fourDForm = new DecimalFormat("#.####");
 
     public static String getAreaInLocalUnit(String unit, double areaInSqMt) {
         String convertedArea = "";
 
-        if ("Square Meter".equals(unit)) {
+        if (CODE_AREA_TYPE_SQMT.equals(unit)) {
             convertedArea = Double.toString(areaInSqMt);
-        } else if ("Bigha-Katha-Dhur".equals(unit)) {
+        } else if (CODE_AREA_TYPE_BIGHA_KATHA_DHUR.equals(unit)) {
             convertedArea = convertSqMeterToBighaKathaDhur(areaInSqMt);
-        } else if ("Square Feet".equals(unit)) {
+        } else if (CODE_AREA_TYPE_SQFT.equals(unit)) {
             convertedArea = Double.toString(areaInSqMt / 0.093);
-        } else if ("Hectare".equals(unit)) {
+        } else if (CODE_AREA_TYPE_HECTARE.equals(unit)) {
             convertedArea = Double.toString(areaInSqMt / 10000);
-        } else if ("Ropani-Ana-Paisa-Dam".equals(unit)) {
+        } else if (CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM.equals(unit)) {
             convertedArea = convertSqMeterToRopaniAnaPaisaDam(areaInSqMt);
         }
 
@@ -102,15 +108,15 @@ public class AreaConversion {
         if (areaInLocalUnit == null || areaInLocalUnit.equals("")) {
             return 0;
         } else {
-            if ("Square Meter".equals(unit)) {
+            if (CODE_AREA_TYPE_SQMT.equals(unit)) {
                 area = Double.parseDouble(areaInLocalUnit);
-            } else if ("Bigha-Katha-Dhur".equals(unit)) {
+            } else if (CODE_AREA_TYPE_BIGHA_KATHA_DHUR.equals(unit)) {
                 area = convertBighaKathaDhurToSquareMeter(areaInLocalUnit);
-            } else if ("Square Feet".equals(unit)) {
+            } else if (CODE_AREA_TYPE_SQFT.equals(unit)) {
                 area = 0.093 * Double.parseDouble(areaInLocalUnit);
-            } else if ("Hectare".equals(unit)) {
+            } else if (CODE_AREA_TYPE_HECTARE.equals(unit)) {
                 area = 10000 * Double.parseDouble(areaInLocalUnit);
-            } else if ("Ropani-Ana-Paisa-Dam".equals(unit)) {
+            } else if (CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM.equals(unit)) {
                 area = convertRopaniAnaPaisaDamToSquareMeter(areaInLocalUnit);
             }
 
