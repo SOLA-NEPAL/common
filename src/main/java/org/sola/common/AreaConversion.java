@@ -113,8 +113,6 @@ public class AreaConversion {
             } else if ("Ropani-Ana-Paisa-Dam".equals(unit)) {
                 area = convertRopaniAnaPaisaDamToSquareMeter(areaInLocalUnit);
             }
-
-
         }
         area = Double.valueOf(fourDForm.format(area));
         return area;
