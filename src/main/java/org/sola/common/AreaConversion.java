@@ -1,15 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.sola.common;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.regex.Pattern;
 
-/**
- *
- * @author Dinesh
- */
 public class AreaConversion {
 
     public static final String CODE_AREA_TYPE_SQMT = "sqm";
@@ -17,11 +11,51 @@ public class AreaConversion {
     public static final String CODE_AREA_TYPE_SQFT = "sqfeet";
     public static final String CODE_AREA_TYPE_BIGHA_KATHA_DHUR = "bighar";
     public static final String CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM = "ropani";
-    
     private static DecimalFormat fourDForm = new DecimalFormat("#.####");
+    
+    public static String getDefaultArea(String unitType) {
+        String defaultArea = "0";
+        
+        if (unitType == null || unitType.isEmpty()) {
+            return defaultArea;
+        }
+
+        if (unitType.equals(CODE_AREA_TYPE_BIGHA_KATHA_DHUR)) {
+            defaultArea = "0-0-0";
+        } else if (unitType.equals(CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM)) {
+            defaultArea = "0-0-0-0";
+        }
+        return defaultArea;
+    }
+    
+    public static boolean checkArea(String area, String unitType) {
+        if (unitType == null || unitType.isEmpty() || area == null || area.isEmpty()) {
+            return false;
+        }
+
+        DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
+
+        if (unitType.equals(CODE_AREA_TYPE_BIGHA_KATHA_DHUR)) {
+            Pattern r = Pattern.compile("\\d+-\\d+-\\d+(\\" + symbols.getDecimalSeparator() + "\\d+)?");
+            return r.matcher(area).matches();
+        } else if (unitType.equals(CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM)) {
+            Pattern r = Pattern.compile("\\d+-\\d+-\\d+-\\d+(\\" + symbols.getDecimalSeparator() + "\\d+)?");
+            return r.matcher(area).matches();
+        } else if (unitType.equals(CODE_AREA_TYPE_HECTARE)
+                || unitType.equals(CODE_AREA_TYPE_SQFT)
+                || unitType.equals(CODE_AREA_TYPE_SQMT)) {
+            Pattern r = Pattern.compile("\\d+(\\" + symbols.getDecimalSeparator() + "\\d+)?");
+            return r.matcher(area).matches();
+        }
+        return false;
+    }
 
     public static String getAreaInLocalUnit(String unit, double areaInSqMt) {
-        String convertedArea = "";
+        if (unit == null || unit.equals("")) {
+            return "";
+        }
+        String convertedArea = Double.toString(areaInSqMt);
 
         if (CODE_AREA_TYPE_SQMT.equals(unit)) {
             convertedArea = Double.toString(areaInSqMt);
@@ -47,7 +81,7 @@ public class AreaConversion {
         temp = temp % 338.6315808;
         temp = temp / 16.93157904;
         temp = Double.valueOf(fourDForm.format(temp));
-        convertedArea = Integer.toString(bigha[0]) + "-" + Integer.toString(bigha[1]) + "-" + String.format("{0:F3}", Double.toString(temp));
+        convertedArea = Integer.toString(bigha[0]) + "-" + Integer.toString(bigha[1]) + "-" + temp;
         return convertedArea;
     }
 
@@ -107,19 +141,20 @@ public class AreaConversion {
         double area = 0;
         if (areaInLocalUnit == null || areaInLocalUnit.equals("")) {
             return 0;
-        } else {
-            if (CODE_AREA_TYPE_SQMT.equals(unit)) {
-                area = Double.parseDouble(areaInLocalUnit);
-            } else if (CODE_AREA_TYPE_BIGHA_KATHA_DHUR.equals(unit)) {
-                area = convertBighaKathaDhurToSquareMeter(areaInLocalUnit);
-            } else if (CODE_AREA_TYPE_SQFT.equals(unit)) {
-                area = 0.093 * Double.parseDouble(areaInLocalUnit);
-            } else if (CODE_AREA_TYPE_HECTARE.equals(unit)) {
-                area = 10000 * Double.parseDouble(areaInLocalUnit);
-            } else if (CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM.equals(unit)) {
-                area = convertRopaniAnaPaisaDamToSquareMeter(areaInLocalUnit);
-            }
         }
+
+        if (CODE_AREA_TYPE_SQMT.equals(unit)) {
+            area = Double.parseDouble(areaInLocalUnit);
+        } else if (CODE_AREA_TYPE_BIGHA_KATHA_DHUR.equals(unit)) {
+            area = convertBighaKathaDhurToSquareMeter(areaInLocalUnit);
+        } else if (CODE_AREA_TYPE_SQFT.equals(unit)) {
+            area = 0.093 * Double.parseDouble(areaInLocalUnit);
+        } else if (CODE_AREA_TYPE_HECTARE.equals(unit)) {
+            area = 10000 * Double.parseDouble(areaInLocalUnit);
+        } else if (CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM.equals(unit)) {
+            area = convertRopaniAnaPaisaDamToSquareMeter(areaInLocalUnit);
+        }
+        
         area = Double.valueOf(fourDForm.format(area));
         return area;
     }
