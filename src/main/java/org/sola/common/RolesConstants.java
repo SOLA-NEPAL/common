@@ -31,12 +31,6 @@ package org.sola.common;
  * Holds the list of application roles, used to define access permissions on various methods.
  */
 public class RolesConstants {
-
-    // DASHBOARD
-    public static final String DASHBOARD_VIEW_ASSIGNED_APPS = "DashbrdViewAssign";
-    public static final String DASHBOARD_VIEW_UNASSIGNED_APPS = "DashbrdViewUnassign";
-    public static final String DASHBOARD_VIEW_OWN_APPS = "DashbrdViewOwn";
-
     // APPLICATION
     public static final String APPLICATION_VIEW_APPS = "ApplnView";
     public static final String APPLICATION_CREATE_APPS = "ApplnCreate";
@@ -44,29 +38,20 @@ public class RolesConstants {
     public static final String APPLICATION_PRINT_STATUS_REPORT = "ApplnStatus";
     public static final String APPLICATION_ASSIGN_TO_DEPARTMENT = "ApplnAssignDeprt";
     public static final String APPLICATION_ASSIGN_TO_ALL = "ApplnAssignAll";
-    public static final String APPLICATION_UNASSIGN_FROM_YOURSELF = "ApplnUnassignSelf";
-    public static final String APPLICATION_UNASSIGN_FROM_OTHERS = "ApplnUnassignOthers";
     public static final String APPLICATION_SERVICE_START = "StartService";
     public static final String APPLICATION_SERVICE_COMPLETE = "CompleteService";
     public static final String APPLICATION_SERVICE_CANCEL = "CancelService";
     public static final String APPLICATION_SERVICE_REVERT = "RevertService";
-    public static final String APPLICATION_REQUISITE = "ApplnRequistion";
-    public static final String APPLICATION_RESUBMIT = "ApplnResubmit";
-    public static final String APPLICATION_LAPSE = "ApplnLapse";
     public static final String APPLICATION_APPROVE = "ApplnApprove";
-    public static final String APPLICATION_WITHDRAW = "ApplnWithdraw";
     public static final String APPLICATION_REJECT = "ApplnReject";
     public static final String APPLICATION_VALIDATE = "ApplnValidate";
-    public static final String APPLICATION_DESPATCH = "ApplnDespatch";
     public static final String APPLICATION_ARCHIVE = "ApplnArchive";
 
     // ADMINISTRATIVE
     public static final String ADMINISTRATIVE_BA_UNIT_SAVE = "BaunitSave";
-    public static final String ADMINISTRATIVE_RRR_SAVE = "BaunitrrrSave";
-    public static final String ADMINISTRATIVE_PARCEL_SAVE = "BaunitParcelSave";
-    public static final String ADMINISTRATIVE_NOTATION_SAVE = "BaunitNotnSave";
     public static final String ADMINISTRATIVE_BA_UNIT_PRINT_CERT = "BaunitCertificate";
     public static final String ADMINISTRATIVE_BA_UNIT_SEARCH = "BaunitSearch";
+    public static final String ADMINISTRATIVE_MOTH_MANAGEMENT = "MothManagement";
 
     // TRANSACTIONAL DOCUMENTS
     public static final String SOURCE_TRANSACTIONAL = "TransactionCommit";
