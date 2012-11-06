@@ -52,6 +52,8 @@ public class RolesConstants {
     public static final String ADMINISTRATIVE_BA_UNIT_PRINT_CERT = "BaunitCertificate";
     public static final String ADMINISTRATIVE_BA_UNIT_SEARCH = "BaunitSearch";
     public static final String ADMINISTRATIVE_MOTH_MANAGEMENT = "MothManagement";
+    public static final String ADMINISTRATIVE_RESTRICTIONS_SEARCH = "RestrictionSearch";
+    public static final String ADMINISTRATIVE_RESTRICTION_PRINT = "PrintRestrLetter";
 
     // TRANSACTIONAL DOCUMENTS
     public static final String SOURCE_TRANSACTIONAL = "TransactionCommit";
@@ -85,5 +87,4 @@ public class RolesConstants {
     public static final String ADMIN_MANAGE_REFDATA = "ManageRefdata";
     public static final String ADMIN_MANAGE_SETTINGS = "ManageSettings";
     public static final String ADMIN_MANAGE_BR = "ManageBR";     
-   
 }
