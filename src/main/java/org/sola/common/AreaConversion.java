@@ -6,11 +6,11 @@ import java.util.regex.Pattern;
 
 public class AreaConversion {
 
-    public static final String CODE_AREA_TYPE_SQMT = "sqm";
+    public static final String CODE_AREA_TYPE_SQMT = "1503";
     public static final String CODE_AREA_TYPE_HECTARE = "hectare";
     public static final String CODE_AREA_TYPE_SQFT = "sqfeet";
-    public static final String CODE_AREA_TYPE_BIGHA_KATHA_DHUR = "bighar";
-    public static final String CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM = "ropani";
+    public static final String CODE_AREA_TYPE_BIGHA_KATHA_DHUR = "1502";
+    public static final String CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM = "1501";
     private static DecimalFormat fourDForm = new DecimalFormat("#.####");
     
     public static String getDefaultArea(String unitType) {
