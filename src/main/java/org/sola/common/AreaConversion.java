@@ -11,11 +11,11 @@ public class AreaConversion {
     public static final String CODE_AREA_TYPE_SQFT = "sqfeet";
     public static final String CODE_AREA_TYPE_BIGHA_KATHA_DHUR = "1502";
     public static final String CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM = "1501";
-    private static DecimalFormat fourDForm = new DecimalFormat("#.####");
-    
+    private static DecimalFormat fourDForm = new DecimalFormat("#.##");
+
     public static String getDefaultArea(String unitType) {
         String defaultArea = "0";
-        
+
         if (unitType == null || unitType.isEmpty()) {
             return defaultArea;
         }
@@ -27,7 +27,7 @@ public class AreaConversion {
         }
         return defaultArea;
     }
-    
+
     public static boolean checkArea(String area, String unitType) {
         if (unitType == null || unitType.isEmpty() || area == null || area.isEmpty()) {
             return false;
@@ -114,6 +114,9 @@ public class AreaConversion {
         ropani[2] = (int) (temp / 7.94901636);
         temp = temp % 7.94901636;
         temp = temp / 1.98725409;
+//        temp = Double.valueOf(fourDForm.format(temp));
+//        DecimalFormat df = new DecimalFormat("0.00");
+//        String dam = df.format(temp);
         temp = Double.valueOf(fourDForm.format(temp));
         convertedArea = Integer.toString(ropani[0]) + "-" + Integer.toString(ropani[1]) + "-" + Integer.toString(ropani[2]) + "-" + Double.toString(temp);
         return convertedArea;
@@ -154,7 +157,7 @@ public class AreaConversion {
         } else if (CODE_AREA_TYPE_ROPANI_ANA_PAISA_DAM.equals(unit)) {
             area = convertRopaniAnaPaisaDamToSquareMeter(areaInLocalUnit);
         }
-        
+
         area = Double.valueOf(fourDForm.format(area));
         return area;
     }
