@@ -158,7 +158,7 @@ public class AreaConversion {
             area = convertRopaniAnaPaisaDamToSquareMeter(areaInLocalUnit);
         }
 
-        area = Double.valueOf(fourDForm.format(area));
+        //area = Double.valueOf(fourDForm.format(area));
         return area;
     }
 }
