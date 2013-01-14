@@ -109,7 +109,7 @@ public class NepaliIntegersConvertor {
     }
 
     public static String getLocalizedValue(String str) {
-        if (Locale.getDefault().getLanguage().equals("np")) {
+        if (Locale.getDefault().getLanguage().equals("ne")) {
             return toNepaliInteger(str);
         } else {
             return toStringInteger(str);
