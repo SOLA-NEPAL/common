@@ -14,7 +14,7 @@ public class StringUtility {
     }
     
     /** 
-     * Returns empty string if provided value is null. 
+     * Returns empty string if provided value is null, otherwise the value itself will be returned. 
      * @param value String value to check
      */
     public static String empty(String value){
